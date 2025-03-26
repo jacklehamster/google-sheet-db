@@ -8,6 +8,7 @@
     "build-icon": "icon-gen -i ../icon.png -o ."
   },
   "devDependencies": {
+    "@types/express": "^5.0.1",
     "baojs": "^0.2.1",
     "bun-types": "^1.1.13",
     "icon-gen": "^4.0.0",
@@ -16,6 +17,9 @@
   },
   "peerDependencies": {
     "typescript": "^5.0.0",
-    "bun-template": "link:bun-template"
+    "@dobuki/google-sheet-db": "link:@dobuki/google-sheet-db"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
   }
 }

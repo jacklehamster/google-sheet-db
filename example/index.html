@@ -1,16 +1,78 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en-US">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bun Template</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Google Sheet</title>
   </head>
   <body>
+    <div id="info">
+      <!-- <table id="table">
+        <thead></thead>
+      </table> -->
+    </div>
   </body>
   <script type="module">
-    import { Hello } from './dist/index.js';
+    fetch("sheet")
+      .then((response) => response.json())
+      .then((data) => {
+        for (let sheet in data) {
+          const h2 = document.createElement("h2");
+          h2.textContent = sheet;
+          document.getElementById("info").appendChild(h2);
+          const table = document.createElement("table");
+          table.id = `table-${sheet}`;
+          const thead = document.createElement("thead");
+          table.appendChild(thead);
+          document.getElementById("info").appendChild(table);
 
-    const h1 = document.body.appendChild(document.createElement("h1"));
-    h1.textContent = Hello.hello();
+          const handledColumn = {};
+          data[sheet].forEach((row, index) => {
+            const table = document.getElementById(`table-${sheet}`);
+            const thead = table.querySelector("thead");
+            const tr = document.createElement("tr");
+            for (let key in row) {
+              if (key == "sheet" || key == "row") {
+                continue;
+              }
+              if (!handledColumn[key]) {
+                const th = document.createElement("th");
+                th.textContent = key;
+                thead.appendChild(th);
+                handledColumn[key] = true;
+              }
+              const td = document.createElement("td");
+              const input = document.createElement("input");
+              input.type = "text";
+              input.value = row[key];
+              input.addEventListener("change", (event) => {
+                row[key] = event.target.value;
+                saveButton.disabled = false;
+              });
+              td.appendChild(input);
+
+              tr.appendChild(td);
+            }
+
+            const saveButton = document.createElement("button");
+            saveButton.textContent = "Save";
+            saveButton.type = "button";
+            saveButton.disabled = true;
+            saveButton.addEventListener("click", () => {
+              saveButton.disabled = true;
+              fetch("update-sheet", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify([row]),
+              });
+            });
+            tr.appendChild(saveButton);
+
+            table.appendChild(tr);
+          });
+        }
+      });
   </script>
 </html>

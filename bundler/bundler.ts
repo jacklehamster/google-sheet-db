@@ -1,10 +1,10 @@
 async function bundle() {
   return await Bun.build({
-    entrypoints: ['./src/index.tsx'],
+    entrypoints: ['./src/index.ts'],
     outdir: './dist',
     minify: true,
     sourcemap: "external",
-    target: "browser",
+    target: "node",
   });
 }
 

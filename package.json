@@ -1,25 +1,16 @@
 {
-  "name": "bun-template",
-  "module": "src/index.tsx",
-  "description": "Bun template for creating projects using bunjs",
-  "version": "1.0.65",
-  "keywords": [
-    "bun",
-    "bunjs",
-    "typescript",
-    "template",
-    "npm",
-    "np",
-    "publish",
-    "git"
-  ],
+  "name": "@dobuki/google-sheet-db",
+  "module": "src/index.ts",
+  "description": "Use google sheet as DB",
+  "version": "1.0.0",
+  "keywords": [],
   "repository": {
     "type": "git",
-    "url": "git@github.com:jacklehamster/bun-template.git"
+    "url": "https://github.com/jacklehamster/google-sheet-db.git"
   },
-  "homepage": "https://jacklehamster.github.io/bun-template/",
+  "homepage": "https://jacklehamster.github.io/google-sheet-db/",
   "author": {
-    "name": "Jack Le Hamster",
+    "name": "Vincent Le Quang",
     "email": "jacklehamster@gmail.com"
   },
   "license": "MIT",
@@ -31,6 +22,7 @@
   },
   "scripts": {
     "test": "bun test",
+    "sample": "bun run src/sample-sheet.ts",
     "build": "bun i && rm -rf *.tsbuildinfo && rm -rf dist/*.* && bun run bundler/bundler.ts && bun run test && bun run build:declaration && bun link",
     "build:declaration": "tsc --emitDeclarationOnly --project tsconfig.types.json",
     "build:example": "cd example && bun i && bun run build && cd ..",
@@ -45,6 +37,11 @@
     "dist"
   ],
   "devDependencies": {
-    "@dobuki/dev-dependencies": "latest"
+    "@dobuki/dev-dependencies": "latest",
+    "@types/express": "^5.0.1"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "googleapis": "^148.0.0"
   }
 }
