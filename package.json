@@ -2,7 +2,7 @@
   "name": "@dobuki/google-sheet-db",
   "module": "src/index.ts",
   "description": "Use google sheet as DB",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "keywords": [],
   "repository": {
     "type": "git",
