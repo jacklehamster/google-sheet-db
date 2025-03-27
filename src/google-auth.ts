@@ -6,8 +6,6 @@ config();
 const keyFile = process.env.SHEETS_SERVICE_KEY_FILE;
 const credentials = process.env.SHEETS_SERVICE_KEY_JSON;
 
-console.log(keyFile, credentials);
-
 if (!keyFile && !credentials) {
   console.log("You need to set the SHEETS_SERVICE_KEY_FILE environment variable to the location of the sheets-services.json file.");
   throw new Error('Service account key file not found.');
