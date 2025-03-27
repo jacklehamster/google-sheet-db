@@ -38,6 +38,7 @@
   ],
   "devDependencies": {
     "@dobuki/dev-dependencies": "latest",
+    "@types/dotenv": "^8.2.3",
     "@types/express": "^5.0.1",
     "dotenv": "^16.4.7",
     "googleapis": "^148.0.0"
