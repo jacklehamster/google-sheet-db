@@ -33,7 +33,7 @@ export async function updateSheetRow(
       const response = await sheets.spreadsheets.values.update({
         spreadsheetId: spreadsheetId,
         range: `${row.sheet}!A${row.row}`,
-        valueInputOption: 'RAW',
+        valueInputOption: 'USER_ENTERED',
         requestBody: {
           values: [valueArray],
         },

@@ -58,9 +58,11 @@ export async function listSheetsAndFetchData(
 
         row.values?.forEach((cell, index) => {
           const fieldName = fields[index];
-          const effectiveValue = cell.effectiveValue;
-          const formula = cell.userEnteredValue?.formulaValue;
-          obj[fieldName] = effectiveValue?.stringValue || effectiveValue?.numberValue || effectiveValue?.boolValue || formula;
+          if (cell.userEnteredFormat?.numberFormat?.type === "DATE") {
+            obj[fieldName] = cell.formattedValue;
+          } else {
+            obj[fieldName] = cell.userEnteredValue?.stringValue || cell.userEnteredValue?.numberValue || cell.userEnteredValue?.boolValue || cell.userEnteredValue?.formulaValue;
+          }
         });
 
         if (condition && !condition(obj)) {
