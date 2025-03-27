@@ -56,6 +56,7 @@ export async function listSheetsAndFetchData(
           row: r + 2,
         };
 
+        let hasData = false;
         row.values?.forEach((cell, index) => {
           const fieldName = fields[index];
           if (cell.userEnteredFormat?.numberFormat?.type === "DATE") {
@@ -63,9 +64,14 @@ export async function listSheetsAndFetchData(
           } else {
             obj[fieldName] = cell.userEnteredValue?.stringValue || cell.userEnteredValue?.numberValue || cell.userEnteredValue?.boolValue || cell.userEnteredValue?.formulaValue;
           }
+          if (obj[fieldName] !== undefined) {
+            hasData = true;
+          }
         });
-
         if (condition && !condition(obj)) {
+          return null;
+        }
+        if (!hasData) {
           return null;
         }
         return obj;

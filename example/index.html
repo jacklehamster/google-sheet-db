@@ -32,7 +32,7 @@
             const thead = table.querySelector("thead");
             const tr = document.createElement("tr");
             for (let key in row) {
-              if (key == "sheet" || key == "row") {
+              if (key == "sheet") {
                 continue;
               }
               if (!handledColumn[key]) {
@@ -42,14 +42,18 @@
                 handledColumn[key] = true;
               }
               const td = document.createElement("td");
-              const input = document.createElement("input");
-              input.type = "text";
-              input.value = row[key];
-              input.addEventListener("change", (event) => {
-                row[key] = event.target.value;
-                saveButton.disabled = false;
-              });
-              td.appendChild(input);
+              if (key === "row") {
+                td.textContent = row[key];
+              } else {
+                const input = document.createElement("input");
+                input.type = "text";
+                input.value = row[key];
+                input.addEventListener("change", (event) => {
+                  row[key] = event.target.value;
+                  saveButton.disabled = false;
+                });
+                td.appendChild(input);
+              }
 
               tr.appendChild(td);
             }
