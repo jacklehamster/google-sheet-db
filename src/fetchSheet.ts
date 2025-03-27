@@ -1,12 +1,14 @@
 import { google } from 'googleapis';
 import { Row } from './Row';
 import { googleAuth } from './google-auth';
+import { Options } from './Options';
 
 const sheets = google.sheets({ version: 'v4', auth: googleAuth });
 
 export async function listSheetsAndFetchData(
   spreadsheetId: string,
-  condition?: (row: any) => boolean
+  condition?: (row: any) => boolean,
+  options: Options = {},
 ): Promise<void | Record<string, Row[]>> {
   try {
     const spreadsheet = await sheets.spreadsheets.get({
@@ -19,14 +21,12 @@ export async function listSheetsAndFetchData(
       return;
     }
 
-    const sheetList = spreadsheet.data.sheets.map(sheet => ({
-      title: sheet.properties?.title,
-      sheetId: sheet.properties?.sheetId,
-    }));
-
     const sheetsData: Record<string, Row[]> = {};
-    for (const sheet of sheetList) {
-      const sheetTitle = sheet.title;
+    for (const sheet of spreadsheet.data.sheets) {
+      const sheetTitle = sheet.properties?.title;
+      if (options.sheet && sheetTitle !== options.sheet) {
+        continue;
+      }
       if (!sheetTitle) {
         console.log('Sheet title not found.');
         continue;
