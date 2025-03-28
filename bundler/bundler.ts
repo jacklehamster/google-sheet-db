@@ -5,6 +5,7 @@ async function bundle() {
     minify: false,
     sourcemap: "external",
     target: "bun",
+    format: 'esm', // Explicitly output ESM
   });
 }
 
