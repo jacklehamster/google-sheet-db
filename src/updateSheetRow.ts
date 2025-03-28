@@ -28,7 +28,13 @@ export async function updateSheetRow(
   }
 
   return await Promise.all(rows.map(async (row) => {
-    const fields = fieldsPerSheet[row.sheet];
+    if (options.sheet && row.sheet !== options.sheet) {
+      return;
+    }
+    const fields = fieldsPerSheet[row.sheet] ?? [];
+    if (!fields.length) {
+      return;
+    }
     const valueArray: any[] = [];
     for (const field of fields) {
       valueArray.push(row[field] ?? '');
