@@ -1,22 +1,20 @@
 import { google } from 'googleapis';
 import { Row } from './Row';
-import { googleAuth } from './google-auth';
 import { Options } from './Options';
-
-const sheets = google.sheets({ version: 'v4', auth: googleAuth });
+import { getGoogleAuth } from './google-auth';
 
 export async function listSheetsAndFetchData(
   spreadsheetId: string,
-  condition?: (row: any) => boolean,
   options: Options = {},
 ): Promise<void | Record<string, Row[]>> {
   try {
+    const sheets = google.sheets({ version: 'v4', auth: getGoogleAuth(true, options?.credentials) });
     const spreadsheet = await sheets.spreadsheets.get({
-      spreadsheetId: spreadsheetId,
+      spreadsheetId,
       includeGridData: false,
     });
 
-    if (!spreadsheet.data.sheets) {
+    if (!spreadsheet.data.sheets?.length) {
       console.log('No sheets found in the spreadsheet.');
       return;
     }
@@ -68,7 +66,7 @@ export async function listSheetsAndFetchData(
             hasData = true;
           }
         });
-        if (condition && !condition(obj)) {
+        if (options.condition && !options.condition(obj)) {
           return null;
         }
         if (!hasData) {

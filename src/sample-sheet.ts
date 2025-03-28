@@ -6,8 +6,10 @@ const SAMPLE_SHEET_ID = '1VwYU7nTSlwhi2iBSFvYBnuhxPUJdIYwE9qbKuVwDk04';
 
 
 // Run the function
-const data = await listSheetsAndFetchData(SAMPLE_SHEET_ID, (row) => {
-  return row.sheet === 'Sheet1' && row.Name === "Jackie";
+const data = await listSheetsAndFetchData(SAMPLE_SHEET_ID, {
+  condition: (row) => {
+    return row.sheet === 'Sheet1' && row.Name === "Jackie";
+  },
 });
 
 if (data) {
@@ -16,6 +18,8 @@ if (data) {
     row["Test date"] = new Date().toString();
   });
 
-  const response = await updateSheetRow(SAMPLE_SHEET_ID, data["Sheet1"]);
+  const response = await updateSheetRow(SAMPLE_SHEET_ID, data["Sheet1"], {
+    sheet: "Sheet1",
+  });
   console.log("Update result:\n", response);
 }

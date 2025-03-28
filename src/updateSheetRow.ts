@@ -1,16 +1,20 @@
 import { google } from 'googleapis';
 import { Row } from './Row';
-import { googleAuthReadWrite } from './google-auth';
+import { Options } from './Options';
+import { getGoogleAuth } from './google-auth';
 
-
-const sheets = google.sheets({ version: 'v4', auth: googleAuthReadWrite });
 export async function updateSheetRow(
   spreadsheetId: string,
-  rows: Row[]) {
+  rows: Row[],
+  options: Options = {}) {
 
+  const sheets = google.sheets({ version: 'v4', auth: getGoogleAuth(false, options.credentials) });
   const sheetNames = new Set(rows.map(row => row.sheet));
   const fieldsPerSheet: Record<string, string[]> = {};
   for (const sheetName of sheetNames) {
+    if (options.sheet && sheetName !== options.sheet) {
+      continue;
+    }
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId: spreadsheetId,
       range: `${sheetName}!1:1`,
