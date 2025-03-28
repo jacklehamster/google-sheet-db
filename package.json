@@ -1,8 +1,7 @@
 {
   "name": "@dobuki/google-sheet-db",
-  "module": "src/index.ts",
-  "description": "Use google sheet as DB",
   "version": "1.0.12",
+  "description": "Use Google Sheet as DB",
   "keywords": [],
   "repository": {
     "type": "git",
@@ -15,15 +14,21 @@
   },
   "license": "MIT",
   "type": "module",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    "import": "./dist/index.js",
+    "require": "./dist/index.cjs",
+    "types": "./dist/index.d.ts"
+  },
   "engines": {
     "node": ">=14.0.0"
   },
   "scripts": {
     "test": "bun test",
     "sample": "bun run src/sample-sheet.ts",
-    "build": "bun i && rm -rf *.tsbuildinfo && rm -rf dist/*.* && bun run bundler/bundler.ts && bun run test && bun run build:declaration && bun link",
+    "build": "bun i && rm -rf *.tsbuildinfo && rm -rf dist/*.* && tsc && bun run build:declaration && bun link",
     "build:declaration": "tsc --emitDeclarationOnly --project tsconfig.types.json",
     "build:example": "cd example && bun i && bun run build && cd ..",
     "example": "cd example && bun start && cd ..",
