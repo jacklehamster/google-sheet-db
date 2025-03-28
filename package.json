@@ -1,6 +1,6 @@
 {
   "name": "@dobuki/google-sheet-db",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "Use Google Sheet as DB",
   "keywords": [],
   "repository": {
