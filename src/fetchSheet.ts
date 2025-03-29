@@ -6,7 +6,7 @@ import { getGoogleAuth } from './google-auth';
 export async function listSheetsAndFetchData<T extends Row>(
   spreadsheetId: string,
   options: Options = {},
-): Promise<void | Record<string, Row[]>> {
+): Promise<void | Record<string, T[]>> {
   try {
     const sheets = google.sheets({ version: 'v4', auth: getGoogleAuth(true, options?.credentials) });
     const spreadsheet = await sheets.spreadsheets.get({
