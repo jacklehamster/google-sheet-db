@@ -57,10 +57,10 @@ export async function listSheetsAndFetchData(
         let hasData = false;
         row.values?.forEach((cell, index) => {
           const fieldName = fields[index];
-          if (cell.userEnteredFormat?.numberFormat?.type === "DATE") {
+          if (cell.userEnteredFormat?.numberFormat?.type === "DATE" || cell.userEnteredValue?.formulaValue) {
             obj[fieldName] = cell.formattedValue;
           } else {
-            obj[fieldName] = cell.userEnteredValue?.stringValue || cell.userEnteredValue?.numberValue || cell.userEnteredValue?.boolValue || cell.userEnteredValue?.formulaValue;
+            obj[fieldName] = cell.effectiveValue?.stringValue || cell.effectiveValue?.numberValue || cell.effectiveValue?.boolValue || cell.effectiveValue?.formulaValue;
           }
           if (obj[fieldName] !== undefined) {
             hasData = true;
