@@ -3,7 +3,7 @@ import { Row } from './Row';
 import { Options } from './Options';
 import { getGoogleAuth } from './google-auth';
 
-export async function listSheetsAndFetchData(
+export async function listSheetsAndFetchData<T extends Row>(
   spreadsheetId: string,
   options: Options = {},
 ): Promise<void | Record<string, Row[]>> {
@@ -19,7 +19,7 @@ export async function listSheetsAndFetchData(
       return;
     }
 
-    const sheetsData: Record<string, Row[]> = {};
+    const sheetsData: Record<string, T[]> = {};
     for (const sheet of spreadsheet.data.sheets) {
       const sheetTitle = sheet.properties?.title;
       if (options.sheet && sheetTitle !== options.sheet) {
@@ -73,7 +73,7 @@ export async function listSheetsAndFetchData(
           return null;
         }
         return obj;
-      }).filter(Boolean) as Row[];
+      }).filter(Boolean) as T[];
 
       sheetsData[sheetTitle] = data;
     }
