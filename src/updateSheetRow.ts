@@ -3,9 +3,9 @@ import { Row } from './Row';
 import { Options } from './Options';
 import { getGoogleAuth } from './google-auth';
 
-export async function updateSheetRow(
+export async function updateSheetRow<T extends Row>(
   spreadsheetId: string,
-  rows: Row[],
+  rows: T[],
   options: Options = {}) {
 
   const sheets = google.sheets({ version: 'v4', auth: getGoogleAuth(false, options.credentials) });
