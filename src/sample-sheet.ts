@@ -8,7 +8,7 @@ const SAMPLE_SHEET_ID = '1VwYU7nTSlwhi2iBSFvYBnuhxPUJdIYwE9qbKuVwDk04';
 // Run the function
 const data = await listSheetsAndFetchData(SAMPLE_SHEET_ID, {
   condition: (row) => {
-    return row.sheet === 'Sheet1' && row.Name === "Jackie";
+    return row.sheet === 'Sheet1' && row.Name === "Joe";
   },
 });
 

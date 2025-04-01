@@ -3,10 +3,28 @@ import { Row } from './Row';
 import { Options } from './Options';
 import { getGoogleAuth } from './google-auth';
 
+interface RangeUpdate {
+  sheet: string;
+  colRange: [number, number];
+  row: number;
+  values: any[];
+}
+
 export async function updateSheetRow<T extends Row>(
   spreadsheetId: string,
   rows: T[],
   options: Options = {}) {
+
+  let previousValues;
+  {
+    const sheets = google.sheets({ version: 'v4', auth: getGoogleAuth(true, options.credentials) });
+    const response = await sheets.spreadsheets.values.batchGet({
+      spreadsheetId,
+      valueRenderOption: 'UNFORMATTED_VALUE',
+      ranges: rows.map(row => `${row.sheet}!${row.row}:${row.row}`),
+    }).catch(err => console.error('Error fetching ranges:', err));
+    previousValues = response?.data?.valueRanges?.map(v => v.values?.[0]);
+  }
 
   const sheets = google.sheets({ version: 'v4', auth: getGoogleAuth(false, options.credentials) });
   const sheetNames = new Set(rows.map(row => row.sheet));
@@ -27,7 +45,9 @@ export async function updateSheetRow<T extends Row>(
     fieldsPerSheet[sheetName] = fields;
   }
 
-  return await Promise.all(rows.map(async (row) => {
+  const updates: RangeUpdate[] = [];
+  let pendingUpdate: RangeUpdate | null = null;
+  rows.forEach((row, index) => {
     if (options.sheet && row.sheet !== options.sheet) {
       return;
     }
@@ -35,22 +55,42 @@ export async function updateSheetRow<T extends Row>(
     if (!fields.length) {
       return;
     }
-    const valueArray: any[] = [];
-    for (const field of fields) {
-      valueArray.push(row[field] ?? '');
+    for (let i = 0; i < fields.length; i++) {
+      const field = fields[i];
+      const value = row[field];
+      const fieldChanged = previousValues?.[index]?.[i] !== value;
+
+      if (fieldChanged && !pendingUpdate) {
+        if (!pendingUpdate) {
+          pendingUpdate = {
+            sheet: row.sheet,
+            colRange: [i, i],
+            row: row.row,
+            values: []
+          }
+          updates.push(pendingUpdate);
+        }
+        pendingUpdate.colRange[1] = i;
+        pendingUpdate.values.push(row[field])
+      } else {
+        pendingUpdate = null;
+      }
     }
-    try {
-      const response = await sheets.spreadsheets.values.update({
-        spreadsheetId: spreadsheetId,
-        range: `${row.sheet}!A${row.row}`,
+  });
+  try {
+    const data = updates.map(update => ({
+      range: `${update.sheet}!${update.colRange.map(r => String.fromCharCode('A'.charCodeAt(0) + r) + update.row).join(":")}`,
+      values: [update.values],
+    }));
+    const response = await sheets.spreadsheets.values.batchUpdate({
+      spreadsheetId,
+      requestBody: {
         valueInputOption: 'USER_ENTERED',
-        requestBody: {
-          values: [valueArray],
-        },
-      });
-      return response.data;
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  }));
+        data,
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error:', error);
+  }
 }

@@ -28,7 +28,6 @@ app.get("/sheet", async (req: Request, res: Response) => {
 });
 
 app.post("/update-sheet", async (req: Request, res: Response) => {
-  console.log("Request body:", req.body);
   try {
     const rows = req.body;
     if (!Array.isArray(rows)) {
