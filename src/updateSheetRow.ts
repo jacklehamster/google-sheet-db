@@ -60,7 +60,7 @@ export async function updateSheetRow<T extends Row>(
       const value = row[field];
       const fieldChanged = previousValues?.[index]?.[i] !== value;
 
-      if (fieldChanged && !pendingUpdate) {
+      if (fieldChanged) {
         if (!pendingUpdate) {
           pendingUpdate = {
             sheet: row.sheet,
