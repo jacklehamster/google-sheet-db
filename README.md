@@ -1,6 +1,6 @@
 # google-sheet-db
 
-[![npm version](https://badge.fury.io/js/@dobuki/google-sheet-db.svg)](https://www.npmjs.com/package/@dobuki/google-sheet-db)
+[![npm version](https://badge.fury.io/js/@dobuki%20google-sheet-db.svg)](https://www.npmjs.com/package/@dobuki/google-sheet-db)
 
 For now, this is just some wrapper around Google Sheet for fetching and writing back data.
 
