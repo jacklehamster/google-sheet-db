@@ -3,8 +3,6 @@ import { updateSheetRow } from './updateSheetRow';
 
 const SAMPLE_SHEET_ID = '1VwYU7nTSlwhi2iBSFvYBnuhxPUJdIYwE9qbKuVwDk04';
 
-
-
 // Run the function
 const data = await listSheetsAndFetchData(SAMPLE_SHEET_ID, {
   condition: (row) => {
@@ -14,7 +12,7 @@ const data = await listSheetsAndFetchData(SAMPLE_SHEET_ID, {
 
 if (data) {
   console.log("Fetch result:\n", data);
-  data["Sheet1"].forEach((row) => {
+  data["Sheet1"]?.forEach((row) => {
     row["Test date"] = new Date().toString();
   });
 

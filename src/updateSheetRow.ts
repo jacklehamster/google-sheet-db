@@ -21,7 +21,7 @@ export async function updateSheetRow<T extends Row>(
     const response = await sheets.spreadsheets.values.batchGet({
       spreadsheetId,
       valueRenderOption: 'UNFORMATTED_VALUE',
-      ranges: rows.map(row => `${row.sheet}!${row.row}:${row.row}`),
+      ranges: rows?.map(row => `${row.sheet}!${row.row}:${row.row}`),
     }).catch(err => console.error('Error fetching ranges:', err));
     previousValues = response?.data?.valueRanges?.map(v => v.values?.[0]);
   }
